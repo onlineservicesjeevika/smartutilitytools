@@ -12,6 +12,9 @@ export default function ImageTool() {
   const [quality,setQuality] = useState(75);
   const [format,setFormat] = useState<"image/jpeg"|"image/png"|"image/webp">("image/jpeg");
   const [whiteBg,setWhiteBg] = useState(true);
+  const [cropToFit,setCropToFit] = useState(true);
+  const [cropX,setCropX] = useState(50);
+  const [cropY,setCropY] = useState(50);
   const [busy,setBusy] = useState(false);
   const [message,setMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -29,7 +32,13 @@ export default function ImageTool() {
       const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
       const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Canvas is unavailable.");
       if(mode==="signature"&&whiteBg){ctx.fillStyle="#fff";ctx.fillRect(0,0,w,h);}
-      ctx.drawImage(img,0,0,w,h);
+      if(mode==="resize" && cropToFit){
+        const targetRatio=w/h; const sourceRatio=img.naturalWidth/img.naturalHeight;
+        let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
+        if(sourceRatio>targetRatio){ sw=img.naturalHeight*targetRatio; sx=(img.naturalWidth-sw)*(cropX/100); }
+        else if(sourceRatio<targetRatio){ sh=img.naturalWidth/targetRatio; sy=(img.naturalHeight-sh)*(cropY/100); }
+        ctx.drawImage(img,sx,sy,sw,sh,0,0,w,h);
+      } else { ctx.drawImage(img,0,0,w,h); }
       const mime=mode==="compress"?format:"image/png";
       const blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,mime,mode==="compress"?quality/100:1));
       if(!blob)throw new Error("Could not process this image.");
@@ -47,9 +56,9 @@ export default function ImageTool() {
     <div className="tool-panel p-5 sm:p-8">
       <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={e=>choose(e.target.files?.[0])}/>
       <button type="button" onClick={()=>inputRef.current?.click()} className="drop-zone flex min-h-44 w-full flex-col items-center justify-center rounded-2xl p-6 text-center"><span className="text-lg font-bold text-slate-800">{file?file.name:"Choose an image to get started"}</span><span className="mt-2 text-sm text-slate-500">Tap to upload · JPG, PNG, WebP</span></button>
-      {preview&&<div className="mt-5 flex flex-col items-center gap-3"><img ref={imageRef} src={preview} alt="Selected image preview" className="max-h-56 max-w-full rounded-xl border border-slate-200 object-contain"/><span className="text-xs text-slate-500">{file?.type} · {((file?.size||0)/1024).toFixed(1)} KB</span></div>}
+      {preview&&<div className="mt-5 flex flex-col items-center gap-3">{mode==="resize"?<div className="overflow-hidden rounded-xl border border-slate-300 bg-slate-100" style={{width:160,aspectRatio:`${Math.max(1,width)}/${Math.max(1,height)}`}}><img ref={imageRef} src={preview} alt="Passport photo crop preview" className="h-full w-full object-cover" style={{objectPosition:`${cropX}% ${cropY}%`}}/></div>:<img ref={imageRef} src={preview} alt="Selected image preview" className="max-h-56 max-w-full rounded-xl border border-slate-200 object-contain" />}<span className="text-xs text-slate-500">{file?.type} · {((file?.size||0)/1024).toFixed(1)} KB</span></div>}
       {mode==="compress"&&<div className="mt-6 grid gap-4 sm:grid-cols-2"><label className="text-sm font-semibold">Image quality: {quality}%<input className="mt-3 block w-full" type="range" min="10" max="100" value={quality} onChange={e=>setQuality(Number(e.target.value))}/></label><label className="text-sm font-semibold">Output format<select className="mt-2 block w-full rounded-xl border border-slate-300 p-3" value={format} onChange={e=>setFormat(e.target.value as typeof format)}><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></label></div>}
-      {(mode==="resize"||mode==="signature")&&<div className="mt-6 grid gap-4 sm:grid-cols-2"><label className="text-sm font-semibold">Width (px)<input className="mt-2 block w-full rounded-xl border border-slate-300 p-3" type="number" min="1" max="10000" value={width} onChange={e=>setWidth(Number(e.target.value))}/></label><label className="text-sm font-semibold">Height (px)<input className="mt-2 block w-full rounded-xl border border-slate-300 p-3" type="number" min="1" max="10000" value={height} onChange={e=>setHeight(Number(e.target.value))}/></label>{mode==="signature"&&<label className="flex items-center gap-2 text-sm sm:col-span-2"><input type="checkbox" checked={whiteBg} onChange={e=>setWhiteBg(e.target.checked)}/> Add white background</label>}</div>}
+      {(mode==="resize"||mode==="signature")&&<div className="mt-6 grid gap-4 sm:grid-cols-2"><label className="text-sm font-semibold">Width (px)<input className="mt-2 block w-full rounded-xl border border-slate-300 p-3" type="number" min="1" max="10000" value={width} onChange={e=>setWidth(Number(e.target.value))}/></label><label className="text-sm font-semibold">Height (px)<input className="mt-2 block w-full rounded-xl border border-slate-300 p-3" type="number" min="1" max="10000" value={height} onChange={e=>setHeight(Number(e.target.value))}/></label>{mode==="resize"&&<div className="space-y-4 rounded-xl border border-slate-200 p-4 sm:col-span-2"><label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={cropToFit} onChange={e=>setCropToFit(e.target.checked)}/> Crop image to fit 400 × 600 (passport photo)</label>{cropToFit&&<><label className="block text-sm">Horizontal crop position: {cropX}%<input className="mt-2 block w-full" type="range" min="0" max="100" value={cropX} onChange={e=>setCropX(Number(e.target.value))}/></label><label className="block text-sm">Vertical crop position: {cropY}%<input className="mt-2 block w-full" type="range" min="0" max="100" value={cropY} onChange={e=>setCropY(Number(e.target.value))}/></label><p className="text-xs text-slate-500">Preview shows the crop area. Adjust the sliders to position the subject before downloading.</p></>}</div>}{mode==="signature"&&<label className="flex items-center gap-2 text-sm sm:col-span-2"><input type="checkbox" checked={whiteBg} onChange={e=>setWhiteBg(e.target.checked)}/> Add white background</label>}</div>}
       <button disabled={!file||busy} onClick={processImage} className="mt-7 w-full rounded-xl bg-blue-600 px-5 py-4 font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">{busy?"Processing…":mode==="compress"?"Compress & Download":mode==="resize"?"Resize & Download":"Prepare Signature & Download"}</button>
       {message&&<p role="status" className="mt-4 text-center text-sm text-slate-700">{message}</p>}
     </div>
