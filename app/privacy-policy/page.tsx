@@ -19,6 +19,6 @@ export default function PrivacyPolicyPage() {
     <h2 className="mt-8 text-xl font-semibold">Children's privacy</h2>
     <p className="mt-3 leading-7 text-slate-700">This website is a general-purpose utility site and is not intended to knowingly collect personal information from children.</p>
     <h2 className="mt-8 text-xl font-semibold">Policy updates and contact</h2>
-    <p className="mt-3 leading-7 text-slate-700">We may update this policy as the website changes. For privacy questions, please use the Contact page once our contact details are published.</p>
+    <p className="mt-3 leading-7 text-slate-700">We may update this policy as the website changes. For privacy questions, contact us at Kaushalk100@gmail.com.</p>
   </main>;
 }
