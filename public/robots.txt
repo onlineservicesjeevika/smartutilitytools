@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://smartutilitytools.pages.dev/sitemap.xml
