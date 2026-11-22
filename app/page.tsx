@@ -10,6 +10,6 @@ export default function HomePage() {
       </div>
     </header>
     <ImageTool />
-    <footer className="border-t border-slate-200 bg-white px-4 py-7 text-center text-sm text-slate-500"><nav aria-label="Footer navigation" className="mx-auto mb-4 flex max-w-3xl flex-wrap justify-center gap-x-5 gap-y-3"><Link href="/about/" className="hover:text-blue-600">About Us</Link><Link href="/contact/" className="hover:text-blue-600">Contact Us</Link><Link href="/privacy-policy/" className="hover:text-blue-600">Privacy Policy</Link><Link href="/terms/" className="hover:text-blue-600">Terms of Use</Link><Link href="/disclaimer/" className="hover:text-blue-600">Disclaimer</Link></nav><p>© {new Date().getFullYear()} SmartUtilityTools · Images are processed in your browser.</p></footer>
+    <footer className="border-t border-slate-200 bg-white px-4 py-7 text-center text-sm text-slate-500"><nav aria-label="Footer navigation" style={{display:"flex",flexWrap:"wrap",justifyContent:"center",columnGap:"20px",rowGap:"12px",margin:"0 auto 16px",maxWidth:"48rem"}}><Link href="/about/" className="hover:text-blue-600">About Us</Link><Link href="/contact/" className="hover:text-blue-600">Contact Us</Link><Link href="/privacy-policy/" className="hover:text-blue-600">Privacy Policy</Link><Link href="/terms/" className="hover:text-blue-600">Terms of Use</Link><Link href="/disclaimer/" className="hover:text-blue-600">Disclaimer</Link></nav><p>© {new Date().getFullYear()} SmartUtilityTools · Images are processed in your browser.</p></footer>
   </main>;
 }
