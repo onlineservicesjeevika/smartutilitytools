@@ -15,8 +15,8 @@ export default function PrivacyPolicyPage() {
     <h2 className="mt-8 text-xl font-semibold">Cookies, analytics and advertising</h2>
     <p className="mt-3 leading-7 text-slate-700">The website may use essential technologies needed for hosting and security. If analytics or advertising services, including Google AdSense, are enabled in the future, those providers may use cookies or similar technologies to measure visits, prevent fraud or show and personalize ads, subject to their own policies and your applicable choices. This policy will be updated when such services are introduced.</p>
     <h2 className="mt-8 text-xl font-semibold">Third-party services</h2>
-    <p className="mt-3 leading-7 text-slate-700">Links to third-party websites are governed by those websites' own privacy policies. We are not responsible for their content or practices.</p>
-    <h2 className="mt-8 text-xl font-semibold">Children's privacy</h2>
+    <p className="mt-3 leading-7 text-slate-700">Links to third-party websites are governed by those websites&apos; own privacy policies. We are not responsible for their content or practices.</p>
+    <h2 className="mt-8 text-xl font-semibold">Children&apos;s privacy</h2>
     <p className="mt-3 leading-7 text-slate-700">This website is a general-purpose utility site and is not intended to knowingly collect personal information from children.</p>
     <h2 className="mt-8 text-xl font-semibold">Policy updates and contact</h2>
     <p className="mt-3 leading-7 text-slate-700">We may update this policy as the website changes. For privacy questions, contact us at Kaushalk100@gmail.com.</p>
