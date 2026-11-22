@@ -7,8 +7,8 @@ export default function ImageTool() {
   const [mode,setMode] = useState<Mode>("compress");
   const [file,setFile] = useState<File|null>(null);
   const [preview,setPreview] = useState("");
-  const [width,setWidth] = useState(300);
-  const [height,setHeight] = useState(100);
+  const [width,setWidth] = useState(400);
+  const [height,setHeight] = useState(600);
   const [quality,setQuality] = useState(75);
   const [format,setFormat] = useState<"image/jpeg"|"image/png"|"image/webp">("image/jpeg");
   const [whiteBg,setWhiteBg] = useState(true);
@@ -40,10 +40,10 @@ export default function ImageTool() {
     }catch(e){setMessage(e instanceof Error?e.message:"Something went wrong.");}
     finally{setBusy(false);}
   }
-  const modes:[Mode,string,string][]=[["compress","Compress Image","Reduce file size"],["resize","Resize Image","Set custom dimensions"],["signature","Signature Resizer","Prepare form signatures"]];
+  const modes:[Mode,string,string][]=[["compress","Compress Image","Reduce file size"],["resize","Resize Image","Passport photo default: 400 × 600 px"],["signature","Signature Resizer","Prepare form signatures"]];
   return <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
     <div className="mb-8 text-center"><p className="text-sm font-bold uppercase tracking-widest text-blue-600">All-in-one image utility</p><h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">Make images fit your needs</h1><p className="mx-auto mt-3 max-w-2xl text-slate-600">Compress, resize photos or prepare signature images in one simple tool. Your files stay on your device.</p></div>
-    <div className="mb-5 grid gap-3 sm:grid-cols-3">{modes.map(([id,title,desc])=><button key={id} onClick={()=>{setMode(id);setMessage("");}} className={`rounded-2xl border p-4 text-left transition ${mode===id?"border-blue-600 bg-blue-50 ring-2 ring-blue-100":"border-slate-200 bg-white hover:border-blue-300"}`}><span className="block font-bold">{title}</span><span className="mt-1 block text-sm text-slate-500">{desc}</span></button>)}</div>
+    <div className="mb-5 grid gap-3 sm:grid-cols-3">{modes.map(([id,title,desc])=><button key={id} onClick={()=>{setMode(id);setWidth(id==="signature"?300:400);setHeight(id==="signature"?100:600);setMessage("");}} className={`rounded-2xl border p-4 text-left transition ${mode===id?"border-blue-600 bg-blue-50 ring-2 ring-blue-100":"border-slate-200 bg-white hover:border-blue-300"}`}><span className="block font-bold">{title}</span><span className="mt-1 block text-sm text-slate-500">{desc}</span></button>)}</div>
     <div className="tool-panel p-5 sm:p-8">
       <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={e=>choose(e.target.files?.[0])}/>
       <button type="button" onClick={()=>inputRef.current?.click()} className="drop-zone flex min-h-44 w-full flex-col items-center justify-center rounded-2xl p-6 text-center"><span className="text-lg font-bold text-slate-800">{file?file.name:"Choose an image to get started"}</span><span className="mt-2 text-sm text-slate-500">Tap to upload · JPG, PNG, WebP</span></button>
